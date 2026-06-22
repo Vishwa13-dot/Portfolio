@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import Resume from "../assets/Resume.pdf";
 
-function Hero() {
+function Home() {
   return (
     <section
       id="home"
@@ -90,4 +90,4 @@ function Hero() {
   );
 }
 
-export default Hero;
+export default Home;

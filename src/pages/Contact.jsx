@@ -1,16 +1,10 @@
-import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
+import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 function Contact() {
   return (
     <section id="contact" className="section">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="max-w-5xl mx-auto"
-      >
+      <div className="max-w-5xl mx-auto">
         <div className="border-t border-slate-800 pt-16">
           <p className="text-blue-400 text-sm uppercase tracking-[0.3em] mb-4">
             Contact
@@ -29,7 +23,6 @@ function Contact() {
           </p>
 
           <div className="mt-12 space-y-6">
-
             <a
               href="mailto:vishwaparmar1309@gmail.com"
               className="flex items-center gap-4 text-xl font-medium text-slate-300 hover:text-blue-400 transition-all duration-300 hover:translate-x-2"
@@ -60,13 +53,12 @@ function Contact() {
               <span>GitHub</span>
               <span className="text-sm">↗</span>
             </a>
-
           </div>
-
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }
 
 export default Contact;
+

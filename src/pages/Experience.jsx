@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 
 function Experience() {
   const experiences = [
@@ -27,34 +26,20 @@ function Experience() {
 
   return (
     <section id="experience" className="section">
-      <motion.h2
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="section-title text-center"
-      >
+      <h2 className="section-title text-center">
         Internship Experience
-      </motion.h2>
+      </h2>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="text-center text-slate-400 max-w-3xl mx-auto mb-14"
-      >
+      <p className="text-center text-slate-400 max-w-3xl mx-auto mb-14">
         Professional experience gained through internships
         in Artificial Intelligence, Software Development,
         Data Analysis, and Python Programming.
-      </motion.p>
+      </p>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {experiences.map((exp, index) => (
-          <motion.div
+        {experiences.map((exp) => (
+          <div
             key={exp.company}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.15 }}
-            viewport={{ once: true }}
             className="bg-slate-800/60 border border-slate-700 rounded-2xl p-8 hover:border-blue-500 transition-all duration-300 hover:-translate-y-2 min-h-[340px]"
           >
             <h3 className="text-2xl font-bold text-blue-400 mb-2">
@@ -72,7 +57,7 @@ function Experience() {
             <p className="text-slate-400 leading-relaxed">
               {exp.description}
             </p>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>

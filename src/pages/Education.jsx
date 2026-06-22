@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 
 function Education() {
   const education = [
@@ -27,41 +26,27 @@ function Education() {
 
   return (
     <section id="education" className="section">
-      <motion.h2
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="section-title text-center"
-      >
+      <h2 className="section-title text-center">
         Education
-      </motion.h2>
+      </h2>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="text-center text-slate-400 max-w-3xl mx-auto mb-16"
-      >
+      <p className="text-center text-slate-400 max-w-3xl mx-auto mb-16">
         My academic journey in Information Technology,
         Artificial Intelligence, Machine Learning, and
         Software Development.
-      </motion.p>
+      </p>
 
       <div className="relative max-w-5xl mx-auto">
         <div className="absolute left-4 top-0 h-full w-1 bg-slate-700"></div>
 
-        {education.map((item, index) => (
-          <motion.div
+        {education.map((item) => (
+          <div
             key={item.title}
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.15 }}
-            viewport={{ once: true }}
             className="relative pl-16 mb-12"
           >
             <div className="absolute left-0 top-3 w-8 h-8 rounded-full bg-blue-500 border-4 border-slate-900 shadow-lg shadow-blue-500/50"></div>
 
-            <div className="bg-slate-800/60 border border-slate-700 rounded-2xl p-8 hover:border-blue-500 transition duration-300">
+            <div className="bg-slate-800/60 border border-slate-700 rounded-2xl p-8 hover:border-blue-500 hover:-translate-y-1 transition-all duration-300">
               <span className="text-blue-400 font-semibold text-sm uppercase tracking-wider">
                 {item.year}
               </span>
@@ -78,7 +63,7 @@ function Education() {
                 {item.detail}
               </p>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>

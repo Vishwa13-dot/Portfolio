@@ -1,6 +1,7 @@
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import emailjs from "@emailjs/browser";
 
 const ContactSchema = Yup.object().shape({
   name: Yup.string()
@@ -91,10 +92,38 @@ function Contact() {
                   message: "",
                 }}
                 validationSchema={ContactSchema}
-                onSubmit={(values, { resetForm }) => {
-                  console.log(values);
-                  alert("Message Sent Successfully!");
-                  resetForm();
+                onSubmit={(values, { resetForm, setSubmitting }) => {
+
+                  emailjs
+                    .send(
+                      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+                      {
+                        from_name: values.name,
+                        from_email: values.email,
+                        mobile: values.mobile,
+                        message: values.message,
+                      },
+                      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+                    )
+                    .then((result) => {
+                      console.log(result.text);
+
+                      alert("Message Sent Successfully!");
+
+                      resetForm();
+
+                      setSubmitting(false);
+                    })
+
+                    .catch((error) => {
+                      console.log(error.text);
+
+                      alert("Failed to send message!");
+
+                      setSubmitting(false);
+                    });
+
                 }}
               >
                 <Form className="space-y-6">
@@ -107,8 +136,8 @@ function Contact() {
                     </p>
                   </div>
                   <div className="space-y-6">
-                    
-                  {/* Full Name */}
+
+                    {/* Full Name */}
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Full Name
@@ -119,20 +148,20 @@ function Contact() {
                         placeholder="Enter your full name"
                         className="w-full bg-slate-800/70 border border-slate-700 rounded-xl px-5 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                       />
-                      
+
                       <ErrorMessage
                         name="name"
                         component="p"
                         className="mt-2 text-sm text-red-400"
                       />
                     </div>
-                    
-                  {/* Email */}
+
+                    {/* Email */}
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Email Address
                       </label>
-                      
+
                       <Field
                         type="email"
                         name="email"
@@ -147,7 +176,7 @@ function Contact() {
                       />
                     </div>
 
-                  {/* Mobile */}
+                    {/* Mobile */}
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Mobile Number
@@ -167,7 +196,7 @@ function Contact() {
                       />
                     </div>
 
-                  {/* Message */}
+                    {/* Message */}
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
                         Your Message
@@ -188,7 +217,7 @@ function Contact() {
                       />
                     </div>
 
-                  {/* Button */}
+                    {/* Button */}
                     <button
                       type="submit"
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95"

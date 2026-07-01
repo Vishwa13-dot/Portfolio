@@ -2,40 +2,42 @@ import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className="mt-24 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <footer className="border-t border-slate-800 bg-slate-950">
+      <div className="max-w-7xl mx-auto px-6 py-4">
 
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
 
-          <p className="text-slate-400 text-sm">
-            © 2026 Vishwa Parmar. All rights reserved.
+          {/* Center */}
+          <p className="text-slate-500 text-sm text-center">
+            © 2026 Vishwa Parmar. All Rights Reserved.
           </p>
 
-          <div className="flex items-center gap-6 text-xl">
+          {/* Right Side */}
+          <div className="flex items-center gap-5">
+
+            <a
+              href="mailto:vishwaparmar1309@gmail.com"
+              className="w-11 h-11 rounded-full border border-slate-700 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all duration-300"
+            >
+              <FaEnvelope size={18} />
+            </a>
 
             <a
               href="https://linkedin.com/in/work-vishwa"
               target="_blank"
               rel="noreferrer"
-              className="text-slate-400 hover:text-blue-400 transition-all duration-300 hover:scale-110"
+              className="w-11 h-11 rounded-full border border-slate-700 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all duration-300"
             >
-              <FaLinkedin />
+              <FaLinkedin size={18} />
             </a>
 
             <a
               href="https://github.com/Vishwa13-dot"
               target="_blank"
               rel="noreferrer"
-              className="text-slate-400 hover:text-blue-400 transition-all duration-300 hover:scale-110"
+              className="w-11 h-11 rounded-full border border-slate-700 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all duration-300"
             >
-              <FaGithub />
-            </a>
-
-            <a
-              href="mailto:vishwaparmar1309@gmail.com"
-              className="text-slate-400 hover:text-blue-400 transition-all duration-300 hover:scale-110"
-            >
-              <FaEnvelope />
+              <FaGithub size={18} />
             </a>
 
           </div>

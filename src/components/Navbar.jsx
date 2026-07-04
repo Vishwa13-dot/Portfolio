@@ -2,16 +2,20 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { HiMenu, HiX } from "react-icons/hi";
 
+
 function Navbar() {
   const [open, setOpen] = useState(false);
 
-  const links = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Experience", path: "/experience" },
-    { name: "Education", path: "/education" },
-    { name: "Contact", path: "/contact" },
-  ];
+const links = [
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+  { name: "Skills", path: "/skills" },
+  { name: "Experience", path: "/experience" },
+  { name: "Education", path: "/education" },
+  { name: "Projects", path: "/projects" },
+  { name: "Contact", path: "/contact" },
+  { name: "Admin", path: "/admin-login" }
+];
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-slate-900/80 backdrop-blur-lg border-b border-slate-800">

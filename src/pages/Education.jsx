@@ -20,7 +20,7 @@ function Education() {
       title: "Secondary School Certificate (SSC)",
       institute: "Diwan Ballubhai Madhyamik Shala, Ahmedabad",
       detail:
-        "Percentage: 74% • Grade: B1",
+        "Percentage: 74% • Grade: B1", 
     },
   ];
 

@@ -41,7 +41,7 @@ function Projects() {
       ],
       description:
         "Built an NLP-based application that classifies movie reviews into positive or negative sentiments using Machine Learning.",
-      github: "#",
+      github: "https://github.com/Vishwa13-dot/SENTIMENT-ANALYSIS-ON-MOVIE-REVIEW",
       live: "#",
     },
 
@@ -55,8 +55,8 @@ function Projects() {
       ],
       description:
         "Designed and developed a premium responsive resort website with modern UI, animations and a seamless user experience.",
-      github: "#",
-      live: "#",
+      github: "https://github.com/Vishwa13-dot/Resort-Website",
+      live: "https://gh--resort.vercel.app/",
     },
 
     {
@@ -69,8 +69,8 @@ function Projects() {
       ],
       description:
         "A responsive developer portfolio showcasing projects, skills, education and professional experience.",
-      github: "#",
-      live: "#",
+      github: "https://github.com/Vishwa13-dot/Portfolio-Website",
+      live: "https://vishwa--portfolio.vercel.app/",
     },
 
   ];

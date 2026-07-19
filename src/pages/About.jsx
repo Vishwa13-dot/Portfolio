@@ -16,7 +16,7 @@ function About() {
   return (
     <section id="about" className="py-24 px-6">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Heading */}
         <div className="text-center mb-16">
           <p className="text-blue-400 uppercase tracking-widest text-sm mb-3">
@@ -31,7 +31,7 @@ function About() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          
+
           {/* Left Side */}
           <div>
             <h3 className="text-3xl font-bold text-white mb-6">

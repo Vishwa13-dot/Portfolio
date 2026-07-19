@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
@@ -29,6 +30,8 @@ const LoginSchema = Yup.object({
 
 function AdminLogin() {
 
+    const navigate = useNavigate();
+
     const [showPassword, setShowPassword] =
         useState(false);
 
@@ -57,17 +60,30 @@ function AdminLogin() {
                         }}
 
                         validationSchema={LoginSchema}
-                        onSubmit={(values, { setSubmitting }) => {
+                        onSubmit={(values) => {
 
-                            console.log(values);
+                            console.log("Submitted", values);
 
-                            setTimeout(() => {
-                                alert("Login Successful");
-                                setSubmitting(false);
-                            }, 1200);
+                            if (
+                                values.email === "admin@gmail.com" &&
+                                values.password === "123456"
+                            ) {
+
+                                localStorage.setItem("adminLoggedIn", "true");
+
+                                console.log("Correct Login");
+
+                                navigate("/admin/dashboard");
+
+                            } else {
+
+                                console.log("Wrong Login");
+
+                                alert("Invalid Email or Password");
+
+                            }
 
                         }}
-
                     >
 
                         {({ isSubmitting }) => (
@@ -130,9 +146,9 @@ function AdminLogin() {
                                             className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
                                         >
                                             {showPassword ? (
-                                                <FaEyeSlash />
-                                            ) : (
                                                 <FaEye />
+                                            ) : (
+                                                <FaEyeSlash />
                                             )}
                                         </button>
 

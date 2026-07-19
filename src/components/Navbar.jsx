@@ -14,7 +14,7 @@ const links = [
   { name: "Education", path: "/education" },
   { name: "Projects", path: "/projects" },
   { name: "Contact", path: "/contact" },
-  { name: "Admin", path: "/admin-login" }
+  { name: "Admin", path: "/admin" }
 ];
 
   return (

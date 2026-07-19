@@ -1,28 +1,15 @@
+import { useEffect, useState } from "react";
 
 function Education() {
-  const education = [
-    {
-      year: "2025 - Present",
-      title: "Bachelor of Technology (B.Tech)",
-      institute: "JG University, Ahmedabad",
-      detail:
-        "Information Technology • Relevant Coursework: Artificial Intelligence, Python Programming, Data Structures, Machine Learning, DBMS, Web Development",
-    },
-    {
-      year: "2022 - 2025",
-      title: "Diploma in Information Technology",
-      institute: "Government Polytechnic for Girls, Ahmedabad",
-      detail:
-        "CGPA: 8.99 / 10.0 • Relevant Coursework: Python, Data Structures, DBMS, Operating Systems, Advanced Java",
-    },
-    {
-      year: "2022",
-      title: "Secondary School Certificate (SSC)",
-      institute: "Diwan Ballubhai Madhyamik Shala, Ahmedabad",
-      detail:
-        "Percentage: 74% • Grade: B1", 
-    },
-  ];
+  const [education, setEducation] = useState([]);
+
+  useEffect(() => {
+    const savedEducation = localStorage.getItem("education");
+
+    if (savedEducation) {
+      setEducation(JSON.parse(savedEducation));
+    }
+  }, []);
 
   return (
     <section id="education" className="section">
@@ -36,36 +23,57 @@ function Education() {
         Software Development.
       </p>
 
-      <div className="relative max-w-5xl mx-auto">
-        <div className="absolute left-4 top-0 h-full w-1 bg-slate-700"></div>
+      {education.length === 0 ? (
+        <div className="text-center text-slate-400 py-20">
+          <h3 className="text-2xl font-bold">
+            No Education Added Yet
+          </h3>
 
-        {education.map((item) => (
-          <div
-            key={item.title}
-            className="relative pl-16 mb-12"
-          >
-            <div className="absolute left-0 top-3 w-8 h-8 rounded-full bg-blue-500 border-4 border-slate-900 shadow-lg shadow-blue-500/50"></div>
+          <p className="mt-2">
+            Add your education details from the Admin Panel.
+          </p>
+        </div>
+      ) : (
+        <div className="relative max-w-5xl mx-auto">
+          <div className="absolute left-4 top-0 h-full w-1 bg-slate-700"></div>
 
-            <div className="bg-slate-800/60 border border-slate-700 rounded-2xl p-8 hover:border-blue-500 hover:-translate-y-1 transition-all duration-300">
-              <span className="text-blue-400 font-semibold text-sm uppercase tracking-wider">
-                {item.year}
-              </span>
+          {education.map((item) => (
+            <div
+              key={item.id}
+              className="relative pl-16 mb-12"
+            >
+              <div className="absolute left-0 top-3 w-8 h-8 rounded-full bg-blue-500 border-4 border-slate-900 shadow-lg shadow-blue-500/50"></div>
 
-              <h3 className="text-2xl font-bold mt-3">
-                {item.title}
-              </h3>
+              <div className="bg-slate-800/60 border border-slate-700 rounded-2xl p-8 hover:border-blue-500 hover:-translate-y-1 transition-all duration-300">
+                <span className="text-blue-400 font-semibold text-sm uppercase tracking-wider">
+                  {item.year}
+                </span>
 
-              <p className="text-slate-300 mt-2 font-medium">
-                {item.institute}
-              </p>
+                <h3 className="text-2xl font-bold mt-3">
+                  {item.degree}
+                </h3>
 
-              <p className="text-slate-400 mt-4 leading-relaxed">
-                {item.detail}
-              </p>
+                <p className="text-slate-300 mt-2 font-medium">
+                  {item.college}
+                </p>
+
+                <p className="text-slate-400 mt-4">
+                  <span className="font-semibold">
+                    CGPA / Percentage:
+                  </span>{" "}
+                  {item.cgpa}
+                </p>
+
+                {item.detail && (
+                  <p className="text-slate-400 mt-3 leading-relaxed">
+                    {item.detail}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

@@ -6,15 +6,10 @@ import {
   FaTrash,
 } from "react-icons/fa";
 
-
 function ExperienceAdmin() {
-
   const [experience, setExperience] = useState(() => {
     const saved = localStorage.getItem("experience");
-
-    return saved
-      ? JSON.parse(saved)
-      : [];
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [editingId, setEditingId] = useState(null);
@@ -25,6 +20,7 @@ function ExperienceAdmin() {
     company: "",
     role: "",
     duration: "",
+    location: "",
     description: "",
   });
 
@@ -40,6 +36,7 @@ function ExperienceAdmin() {
       company: "",
       role: "",
       duration: "",
+      location: "",
       description: "",
     });
 
@@ -47,17 +44,16 @@ function ExperienceAdmin() {
   };
 
   const addOrUpdateExperience = () => {
-
     if (
       form.company.trim() === "" ||
-      form.role.trim() === ""
+      form.role.trim() === "" ||
+      form.duration.trim() === ""
     ) {
-      alert("Please fill required fields.");
+      alert("Please fill all required fields.");
       return;
     }
 
     if (editingId) {
-
       setExperience(
         experience.map((item) =>
           item.id === editingId
@@ -68,9 +64,7 @@ function ExperienceAdmin() {
             : item
         )
       );
-
     } else {
-
       setExperience([
         ...experience,
         {
@@ -78,102 +72,103 @@ function ExperienceAdmin() {
           ...form,
         },
       ]);
-
     }
 
     clearForm();
-
   };
 
   const editExperience = (item) => {
-
     setEditingId(item.id);
 
     setForm({
       company: item.company,
       role: item.role,
       duration: item.duration,
-      description: item.description,
+      location: item.location || "",
+      description: item.description || "",
     });
 
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const deleteExperience = (id) => {
-
     if (window.confirm("Delete this experience?")) {
-
       setExperience(
         experience.filter(
           (item) => item.id !== id
         )
       );
-
     }
-
   };
 
-  const filteredExperience = experience.filter((item) =>
-    item.company
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+  const filteredExperience = experience.filter((item) => {
+    return (
+      item.company
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      item.role
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      item.duration
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      item.location
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    );
+  });
 
   return (
-
     <div className="space-y-8">
-
       {/* Heading */}
 
-      <div className="flex justify-between items-center">
-
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
         <div>
-
           <h1 className="text-4xl font-bold">
             Experience
           </h1>
 
           <p className="text-slate-400 mt-2">
-            Manage work experience.
+            Manage your professional experience.
           </p>
-
         </div>
 
         <button
           onClick={addOrUpdateExperience}
           className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl flex items-center gap-3 transition"
         >
-
           <FaPlus />
 
           {editingId
             ? "Update Experience"
             : "Add Experience"}
-
         </button>
-
       </div>
 
       {/* Search */}
 
       <div className="relative">
-
         <FaSearch className="absolute left-5 top-5 text-slate-500" />
 
         <input
           type="text"
-          placeholder="Search Company..."
+          placeholder="Search Company, Role, Duration or Location..."
           value={search}
           onChange={(e) =>
             setSearch(e.target.value)
           }
-          className="w-full bg-slate-900 border border-slate-700 rounded-xl py-4 pl-14 pr-5 outline-none"
+          className="w-full bg-slate-900 border border-slate-700 rounded-xl py-4 pl-14 pr-5 outline-none focus:border-blue-500 transition"
         />
-
       </div>
 
       {/* Form */}
 
       <div className="grid md:grid-cols-2 gap-6 bg-slate-900 border border-slate-800 rounded-3xl p-8">
+
+        {/* Company */}
 
         <input
           type="text"
@@ -185,8 +180,10 @@ function ExperienceAdmin() {
               company: e.target.value,
             })
           }
-          className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none"
+          className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500 transition"
         />
+
+        {/* Role */}
 
         <input
           type="text"
@@ -198,12 +195,14 @@ function ExperienceAdmin() {
               role: e.target.value,
             })
           }
-          className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none"
+          className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500 transition"
         />
+
+        {/* Duration */}
 
         <input
           type="text"
-          placeholder="Duration"
+          placeholder="Duration (Example: Jun 2025 - Aug 2025)"
           value={form.duration}
           onChange={(e) =>
             setForm({
@@ -211,11 +210,28 @@ function ExperienceAdmin() {
               duration: e.target.value,
             })
           }
-          className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none"
+          className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500 transition"
         />
 
+        {/* Location */}
+
+        <input
+          type="text"
+          placeholder="Location"
+          value={form.location}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              location: e.target.value,
+            })
+          }
+          className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500 transition"
+        />
+
+        {/* Description */}
+
         <textarea
-          rows="4"
+          rows="5"
           placeholder="Description"
           value={form.description}
           onChange={(e) =>
@@ -224,23 +240,17 @@ function ExperienceAdmin() {
               description: e.target.value,
             })
           }
-          className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none resize-none"
+          className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none resize-none focus:border-blue-500 transition"
         />
-
       </div>
 
       {/* Experience Table */}
 
       <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden">
-
         <div className="overflow-x-auto">
-
           <table className="w-full">
-
             <thead className="bg-slate-800">
-
               <tr>
-
                 <th className="px-6 py-4 text-left">
                   Company
                 </th>
@@ -253,136 +263,107 @@ function ExperienceAdmin() {
                   Duration
                 </th>
 
+                <th className="px-6 py-4 text-left">
+                  Location
+                </th>
+
                 <th className="px-6 py-4 text-center">
                   Actions
                 </th>
-
               </tr>
-
             </thead>
 
             <tbody>
-
               {filteredExperience.length > 0 ? (
-
                 filteredExperience.map((item) => (
-
                   <tr
                     key={item.id}
                     className="border-t border-slate-800 hover:bg-slate-800 transition"
                   >
-
                     {/* Company */}
 
                     <td className="px-6 py-5">
-
                       <div>
-
                         <h3 className="font-semibold text-lg">
                           {item.company}
                         </h3>
 
-                        <p className="text-slate-400 text-sm mt-1">
-                          {item.description}
-                        </p>
-
+                        {item.description && (
+                          <p className="text-slate-400 text-sm mt-2 max-w-md">
+                            {item.description}
+                          </p>
+                        )}
                       </div>
-
                     </td>
 
                     {/* Role */}
 
                     <td className="px-6 py-5">
-
                       <span className="px-4 py-2 rounded-full bg-blue-600/20 text-blue-300">
-
                         {item.role}
-
                       </span>
-
                     </td>
 
                     {/* Duration */}
 
-                    <td className="px-6 py-5">
-
+                    <td className="px-6 py-5 whitespace-nowrap">
                       {item.duration}
+                    </td>
 
+                    {/* Location */}
+
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      {item.location || "-"}
                     </td>
 
                     {/* Actions */}
 
                     <td className="px-6 py-5">
-
                       <div className="flex justify-center gap-4">
-
                         <button
-                          onClick={() => editExperience(item)}
-                          className="w-10 h-10 rounded-xl bg-yellow-500/20 hover:bg-yellow-500 text-yellow-400 flex items-center justify-center transition"
+                          onClick={() =>
+                            editExperience(item)
+                          }
+                          className="w-10 h-10 rounded-xl bg-yellow-500/20 hover:bg-yellow-500 text-yellow-400 hover:text-white flex items-center justify-center transition"
                         >
-
                           <FaEdit />
-
                         </button>
 
                         <button
                           onClick={() =>
                             deleteExperience(item.id)
                           }
-                          className="w-10 h-10 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-400 flex items-center justify-center transition"
+                          className="w-10 h-10 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white flex items-center justify-center transition"
                         >
-
                           <FaTrash />
-
                         </button>
-
                       </div>
-
                     </td>
-
                   </tr>
-
                 ))
-
               ) : (
-
                 <tr>
-
                   <td
-                    colSpan="4"
+                    colSpan="5"
                     className="text-center py-20"
                   >
-
                     <div className="text-6xl mb-4">
-
                       💼
-
                     </div>
 
                     <h2 className="text-2xl font-bold">
-
                       No Experience Found
-
                     </h2>
 
                     <p className="text-slate-400 mt-2">
-
                       Add your first experience using the form above.
-
                     </p>
-
                   </td>
-
                 </tr>
-
               )}
-
             </tbody>
-
           </table>
-
         </div>
-
       </div>
     </div>
   );

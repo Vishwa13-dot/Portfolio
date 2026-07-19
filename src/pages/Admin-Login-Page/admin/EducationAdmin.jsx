@@ -13,7 +13,6 @@ function EducationAdmin() {
     });
 
     const [editingId, setEditingId] = useState(null);
-
     const [search, setSearch] = useState("");
 
     const [form, setForm] = useState({
@@ -45,18 +44,18 @@ function EducationAdmin() {
 
     const addOrUpdateEducation = () => {
         if (
-            form.college.trim() === "" ||
-            form.degree.trim() === "" ||
-            form.year.trim() === "" ||
-            form.cgpa.trim() === ""
+            !form.college.trim() ||
+            !form.degree.trim() ||
+            !form.year.trim() ||
+            !form.cgpa.trim()
         ) {
             alert("Please fill all required fields.");
             return;
         }
 
         if (editingId) {
-            setEducation(
-                education.map((item) =>
+            setEducation((prev) =>
+                prev.map((item) =>
                     item.id === editingId
                         ? {
                             ...item,
@@ -66,8 +65,8 @@ function EducationAdmin() {
                 )
             );
         } else {
-            setEducation([
-                ...education,
+            setEducation((prev) => [
+                ...prev,
                 {
                     id: Date.now(),
                     ...form,
@@ -86,7 +85,7 @@ function EducationAdmin() {
             degree: item.degree,
             year: item.year,
             cgpa: item.cgpa,
-            detail: item.detail || "",
+            detail: item.detail,
         });
 
         window.scrollTo({
@@ -97,16 +96,14 @@ function EducationAdmin() {
 
     const deleteEducation = (id) => {
         if (window.confirm("Delete this education?")) {
-            setEducation(
-                education.filter(
-                    (item) => item.id !== id
-                )
+            setEducation((prev) =>
+                prev.filter((item) => item.id !== id)
             );
         }
     };
 
-    const filteredEducation = education.filter((item) => {
-        return (
+    const filteredEducation = education.filter(
+        (item) =>
             item.college
                 .toLowerCase()
                 .includes(search.toLowerCase()) ||
@@ -115,30 +112,34 @@ function EducationAdmin() {
                 .includes(search.toLowerCase()) ||
             item.year
                 .toLowerCase()
+                .includes(search.toLowerCase()) ||
+            item.cgpa
+                .toLowerCase()
                 .includes(search.toLowerCase())
-        );
-    });
+    );
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 p-4 md:p-6">
 
-            {/* Heading */}
+            {/* Header */}
 
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
 
                 <div>
-                    <h1 className="text-4xl font-bold">
+
+                    <h1 className="text-3xl font-bold text-white">
                         Education
                     </h1>
 
                     <p className="text-slate-400 mt-2">
-                        Manage your education details.
+                        Add, edit and manage your education details.
                     </p>
+
                 </div>
 
                 <button
                     onClick={addOrUpdateEducation}
-                    className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl flex items-center gap-3 transition"
+                    className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl transition w-full lg:w-auto"
                 >
                     <FaPlus />
 
@@ -153,27 +154,25 @@ function EducationAdmin() {
 
             <div className="relative">
 
-                <FaSearch className="absolute left-5 top-5 text-slate-500" />
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
 
                 <input
                     type="text"
-                    placeholder="Search Education..."
+                    placeholder="Search college, degree, year or CGPA..."
                     value={search}
                     onChange={(e) =>
                         setSearch(e.target.value)
                     }
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl py-4 pl-14 pr-5 outline-none focus:border-blue-500"
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-blue-500"
                 />
 
             </div>
 
             {/* Form */}
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8">
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 md:p-8">
 
-                <div className="grid md:grid-cols-2 gap-6">
-
-                    {/* College */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                     <input
                         type="text"
@@ -185,10 +184,8 @@ function EducationAdmin() {
                                 college: e.target.value,
                             })
                         }
-                        className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
+                        className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
                     />
-
-                    {/* Degree */}
 
                     <input
                         type="text"
@@ -200,10 +197,8 @@ function EducationAdmin() {
                                 degree: e.target.value,
                             })
                         }
-                        className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
+                        className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
                     />
-
-                    {/* Year */}
 
                     <input
                         type="text"
@@ -215,10 +210,8 @@ function EducationAdmin() {
                                 year: e.target.value,
                             })
                         }
-                        className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
+                        className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
                     />
-
-                    {/* CGPA */}
 
                     <input
                         type="text"
@@ -230,10 +223,8 @@ function EducationAdmin() {
                                 cgpa: e.target.value,
                             })
                         }
-                        className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
+                        className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
                     />
-
-                    {/* Description */}
 
                     <textarea
                         rows="5"
@@ -245,150 +236,256 @@ function EducationAdmin() {
                                 detail: e.target.value,
                             })
                         }
-                        className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none resize-none focus:border-blue-500"
+                        className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 resize-none outline-none focus:border-blue-500"
                     />
 
                 </div>
 
             </div>
+            {/* Mobile Education Cards */}
 
-            {/* Education Table */}
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden">
+            <div className="grid grid-cols-1 gap-5 lg:hidden">
 
-                <div className="overflow-x-auto">
+                {filteredEducation.length > 0 ? (
+                    filteredEducation.map((item) => (
+                        <div
+                            key={item.id}
+                            className="bg-slate-900 border border-slate-800 rounded-2xl p-5"
+                        >
 
-                    <table className="w-full">
+                            <div>
 
-                        <thead className="bg-slate-800">
+                                <h2 className="text-xl font-semibold break-words">
+                                    {item.college}
+                                </h2>
 
-                            <tr>
+                                <p className="text-blue-400 mt-2 font-medium break-words">
+                                    {item.degree}
+                                </p>
 
-                                <th className="px-6 py-4 text-left">
-                                    College
-                                </th>
+                            </div>
 
-                                <th className="px-6 py-4 text-left">
-                                    Degree
-                                </th>
+                            <div className="mt-5 space-y-3">
 
-                                <th className="px-6 py-4 text-left">
-                                    Year
-                                </th>
+                                <div className="flex justify-between gap-3">
 
-                                <th className="px-6 py-4 text-left">
-                                    CGPA
-                                </th>
+                                    <span className="text-slate-400">
+                                        Year
+                                    </span>
 
-                                <th className="px-6 py-4 text-left">
-                                    Description
-                                </th>
+                                    <span className="text-right">
+                                        {item.year}
+                                    </span>
 
-                                <th className="px-6 py-4 text-center">
-                                    Actions
-                                </th>
+                                </div>
 
-                            </tr>
+                                <div className="flex justify-between gap-3">
 
-                        </thead>
+                                    <span className="text-slate-400">
+                                        CGPA
+                                    </span>
 
-                        <tbody>
+                                    <span className="text-right font-semibold">
+                                        {item.cgpa}
+                                    </span>
 
-                            {filteredEducation.length > 0 ? (
+                                </div>
 
-                                filteredEducation.map((item) => (
+                            </div>
 
-                                    <tr
-                                        key={item.id}
-                                        className="border-t border-slate-800 hover:bg-slate-800 transition"
-                                    >
+                            {item.detail && (
 
-                                        <td className="px-6 py-5 font-semibold">
+                                <div className="mt-5 border-t border-slate-800 pt-4">
+
+                                    <p className="text-sm text-slate-300 break-words">
+                                        {item.detail}
+                                    </p>
+
+                                </div>
+
+                            )}
+
+                            <div className="flex justify-end gap-3 mt-6">
+
+                                <button
+                                    onClick={() => editEducation(item)}
+                                    className="w-10 h-10 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white flex items-center justify-center transition"
+                                >
+                                    <FaEdit />
+                                </button>
+
+                                <button
+                                    onClick={() => deleteEducation(item.id)}
+                                    className="w-10 h-10 rounded-lg bg-red-600 hover:bg-red-700 text-white flex items-center justify-center transition"
+                                >
+                                    <FaTrash />
+                                </button>
+
+                            </div>
+
+                        </div>
+                    ))
+                ) : (
+
+                    <div className="bg-slate-900 border border-slate-800 rounded-2xl py-16 text-center">
+
+                        <div className="text-6xl">
+                            🎓
+                        </div>
+
+                        <h2 className="text-2xl font-bold mt-4">
+                            No Education Found
+                        </h2>
+
+                        <p className="text-slate-400 mt-2">
+                            Add your first education details.
+                        </p>
+
+                    </div>
+
+                )}
+
+            </div>
+
+            {/* Desktop Table */}
+
+            <div className="hidden lg:block bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+
+                <table className="w-full">
+
+                    <thead className="bg-slate-800">
+
+                        <tr>
+
+                            <th className="px-6 py-4 text-left">
+                                College
+                            </th>
+
+                            <th className="px-6 py-4 text-left">
+                                Degree
+                            </th>
+
+                            <th className="px-6 py-4 text-left">
+                                Year
+                            </th>
+
+                            <th className="px-6 py-4 text-left">
+                                CGPA
+                            </th>
+
+                            <th className="px-6 py-4 text-left">
+                                Description
+                            </th>
+
+                            <th className="px-6 py-4 text-center">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {filteredEducation.length > 0 ? (
+
+                            filteredEducation.map((item) => (
+
+                                <tr
+                                    key={item.id}
+                                    className="border-t border-slate-800 hover:bg-slate-800 transition"
+                                >
+
+                                    <td className="px-6 py-5">
+
+                                        <h3 className="text-lg font-semibold break-words">
                                             {item.college}
-                                        </td>
+                                        </h3>
 
-                                        <td className="px-6 py-5">
-                                            <span className="px-4 py-2 rounded-full bg-blue-600/20 text-blue-300">
-                                                {item.degree}
-                                            </span>
-                                        </td>
+                                    </td>
 
-                                        <td className="px-6 py-5">
-                                            {item.year}
-                                        </td>
+                                    <td className="px-6 py-5">
 
-                                        <td className="px-6 py-5">
-                                            {item.cgpa}
-                                        </td>
+                                        <span className="inline-block px-4 py-2 rounded-full bg-blue-600/20 text-blue-300">
+                                            {item.degree}
+                                        </span>
 
-                                        <td className="px-6 py-5 max-w-sm">
-                                            <p className="line-clamp-3 text-slate-300">
-                                                {item.detail}
-                                            </p>
-                                        </td>
+                                    </td>
 
-                                        <td className="px-6 py-5">
+                                    <td className="px-6 py-5">
+                                        {item.year}
+                                    </td>
 
-                                            <div className="flex justify-center gap-4">
+                                    <td className="px-6 py-5 font-semibold">
+                                        {item.cgpa}
+                                    </td>
 
-                                                <button
-                                                    onClick={() => editEducation(item)}
-                                                    className="w-10 h-10 rounded-xl bg-yellow-500/20 hover:bg-yellow-500 text-yellow-400 flex items-center justify-center transition"
-                                                >
-                                                    <FaEdit />
-                                                </button>
+                                    <td className="px-6 py-5 max-w-sm">
 
-                                                <button
-                                                    onClick={() =>
-                                                        deleteEducation(item.id)
-                                                    }
-                                                    className="w-10 h-10 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-400 flex items-center justify-center transition"
-                                                >
-                                                    <FaTrash />
-                                                </button>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-                                ))
-
-                            ) : (
-
-                                <tr>
-
-                                    <td
-                                        colSpan="6"
-                                        className="text-center py-20"
-                                    >
-
-                                        <div className="text-6xl mb-4">
-                                            🎓
-                                        </div>
-
-                                        <h2 className="text-2xl font-bold">
-                                            No Education Found
-                                        </h2>
-
-                                        <p className="text-slate-400 mt-2">
-                                            Add your education details using the form above.
+                                        <p className="text-slate-300 break-words">
+                                            {item.detail || "-"}
                                         </p>
+
+                                    </td>
+
+                                    <td className="px-6 py-5">
+
+                                        <div className="flex justify-center gap-3">
+
+                                            <button
+                                                onClick={() => editEducation(item)}
+                                                className="w-10 h-10 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white flex items-center justify-center transition"
+                                            >
+                                                <FaEdit />
+                                            </button>
+
+                                            <button
+                                                onClick={() => deleteEducation(item.id)}
+                                                className="w-10 h-10 rounded-lg bg-red-600 hover:bg-red-700 text-white flex items-center justify-center transition"
+                                            >
+                                                <FaTrash />
+                                            </button>
+
+                                        </div>
 
                                     </td>
 
                                 </tr>
 
-                            )}
+                            ))
 
-                        </tbody>
+                        ) : (
 
-                    </table>
+                            <tr>
 
-                </div>
+                                <td
+                                    colSpan={6}
+                                    className="py-20 text-center"
+                                >
+
+                                    <div className="text-6xl">
+                                        🎓
+                                    </div>
+
+                                    <h2 className="text-2xl font-bold mt-4">
+                                        No Education Found
+                                    </h2>
+
+                                    <p className="text-slate-400 mt-2">
+                                        Add your first education details.
+                                    </p>
+
+                                </td>
+
+                            </tr>
+
+                        )}
+
+                    </tbody>
+
+                </table>
 
             </div>
-
         </div>
     );
 }

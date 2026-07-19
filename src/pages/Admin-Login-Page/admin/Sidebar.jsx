@@ -7,7 +7,6 @@ import {
   FaEnvelope,
   FaCog,
   FaSignOutAlt,
-  FaBars,
   FaTimes,
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
@@ -68,23 +67,16 @@ function Sidebar({
 
   return (
     <>
-      {/* Mobile Hamburger */}
-
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="fixed top-4 left-4 z-50 lg:hidden bg-slate-800 hover:bg-slate-700 text-white p-3 rounded-xl shadow-xl"
-      >
-        <FaBars size={18} />
-      </button>
-
       {/* Overlay */}
 
-      {mobileOpen && (
-        <div
-          onClick={() => setMobileOpen(false)}
-          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
-        />
-      )}
+      <div
+        onClick={() => setMobileOpen(false)}
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden ${
+          mobileOpen
+            ? "opacity-100 visible"
+            : "opacity-0 invisible"
+        }`}
+      />
 
       {/* Sidebar */}
 
@@ -93,14 +85,16 @@ function Sidebar({
           fixed top-0 left-0 h-screen
           bg-slate-900 border-r border-slate-800
           flex flex-col
-          transition-all duration-300
           z-50
+          transition-all duration-300 ease-in-out
 
-          ${mobileOpen
-            ? "translate-x-0"
-            : "-translate-x-full lg:translate-x-0"
+          ${
+            mobileOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
           }
 
+          lg:translate-x-0
           ${desktopCollapsed ? "lg:w-20" : "lg:w-64"}
 
           w-64
@@ -112,7 +106,7 @@ function Sidebar({
           onClick={() =>
             setDesktopCollapsed(!desktopCollapsed)
           }
-          className="hidden lg:flex absolute -right-4 top-8 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 shadow-xl"
+          className="hidden lg:flex absolute -right-4 top-8 w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white items-center justify-center shadow-lg transition"
         >
           {desktopCollapsed ? (
             <FaAngleDoubleRight />
@@ -125,82 +119,107 @@ function Sidebar({
 
         <button
           onClick={() => setMobileOpen(false)}
-          className="lg:hidden absolute top-5 right-5 text-white text-2xl"
+          className="lg:hidden absolute top-5 right-5 w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-white transition"
         >
           <FaTimes />
         </button>
 
         {/* Logo */}
 
-        <div className="p-6 border-b border-slate-800">
+        <div className="border-b border-slate-800 p-6">
+
           {desktopCollapsed ? (
+
             <div className="flex justify-center">
+
               <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-xl font-bold">
                 A
               </div>
+
             </div>
+
           ) : (
+
             <>
-              <h1 className="text-3xl font-bold text-blue-400">
+
+              <h1 className="text-2xl xl:text-3xl font-bold text-blue-400">
                 Admin Panel
               </h1>
 
-              <p className="text-slate-400 mt-2">
+              <p className="text-slate-400 mt-2 text-sm">
                 Portfolio CMS
               </p>
+
             </>
+
           )}
+
         </div>
 
-        {/* Menu */}
+        {/* Navigation */}
 
-        <div className="flex-1 py-4 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto py-4">
+
           {menu.map((item) => (
+
             <NavLink
               key={item.name}
               to={item.path}
-              onClick={() => {
-                if (window.innerWidth < 1024) {
-                  setMobileOpen(false);
-                }
-              }}
+              onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
                 `
                 flex items-center
-                ${desktopCollapsed
-                  ? "justify-center px-3"
-                  : "justify-start gap-4 px-6"
+                ${
+                  desktopCollapsed
+                    ? "justify-center px-3"
+                    : "gap-4 px-6"
                 }
-                py-3 transition-all duration-300
-                ${isActive
-                  ? "bg-blue-600 text-white border-r-4 border-cyan-300"
-                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                py-3 my-1 mx-2 rounded-xl
+                transition-all duration-300
+
+                ${
+                  isActive
+                    ? "bg-blue-600 text-white"
+                    : "text-slate-400 hover:bg-slate-800 hover:text-white"
                 }
               `
               }
             >
-              <span className="text-xl">
+              <span className="text-xl flex-shrink-0">
                 {item.icon}
               </span>
 
               {!desktopCollapsed && (
-                <span className="font-medium">
+                <span className="font-medium whitespace-nowrap">
                   {item.name}
                 </span>
               )}
             </NavLink>
+
           ))}
+
         </div>
 
         {/* Logout */}
 
         <div className="border-t border-slate-800 p-4">
+
           <button
             onClick={logout}
-            className={`w-full flex items-center ${desktopCollapsed
-                ? "justify-center"
-                : "justify-center gap-3"
-              } bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl transition-all`}
+            className={`
+              w-full
+              flex items-center
+              ${
+                desktopCollapsed
+                  ? "justify-center"
+                  : "justify-center gap-3"
+              }
+              bg-red-600
+              hover:bg-red-700
+              rounded-xl
+              py-3
+              transition
+            `}
           >
             <FaSignOutAlt className="text-lg" />
 
@@ -209,8 +228,11 @@ function Sidebar({
                 Logout
               </span>
             )}
+
           </button>
+
         </div>
+
       </aside>
     </>
   );

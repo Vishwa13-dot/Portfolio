@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-    FaSearch,
-    FaTrash,
-} from "react-icons/fa";
+import { FaSearch, FaTrash } from "react-icons/fa";
 
 function MessagesAdmin() {
     const [search, setSearch] = useState("");
@@ -22,35 +19,47 @@ function MessagesAdmin() {
     const deleteMessage = (id) => {
         if (window.confirm("Delete this message?")) {
             setMessages((prev) =>
-                prev.filter((message) => message.id !== id)
+                prev.filter(
+                    (message) => message.id !== id
+                )
             );
         }
     };
 
-    const filteredMessages = messages.filter((message) => {
-        const searchText = search.toLowerCase();
+    const filteredMessages = messages.filter(
+        (message) => {
+            const searchText = search.toLowerCase();
 
-        return (
-            message.name.toLowerCase().includes(searchText) ||
-            message.email.toLowerCase().includes(searchText) ||
-            message.subject.toLowerCase().includes(searchText)
-        );
-    });
+            return (
+                message.name
+                    .toLowerCase()
+                    .includes(searchText) ||
+                message.email
+                    .toLowerCase()
+                    .includes(searchText) ||
+                message.subject
+                    .toLowerCase()
+                    .includes(searchText) ||
+                message.message
+                    .toLowerCase()
+                    .includes(searchText)
+            );
+        }
+    );
 
     return (
+        <div className="space-y-8 p-4 md:p-6">
 
-        <div className="space-y-8">
-
-            {/* Heading */}
+            {/* Header */}
 
             <div>
 
-                <h1 className="text-4xl font-bold">
+                <h1 className="text-3xl font-bold text-white">
                     Messages
                 </h1>
 
                 <p className="text-slate-400 mt-2">
-                    Contact form messages.
+                    Manage contact form messages.
                 </p>
 
             </div>
@@ -59,162 +68,243 @@ function MessagesAdmin() {
 
             <div className="relative">
 
-                <FaSearch className="absolute left-5 top-5 text-slate-500" />
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
 
                 <input
                     type="text"
-                    placeholder="Search by Name..."
+                    placeholder="Search name, email, subject or message..."
                     value={search}
                     onChange={(e) =>
                         setSearch(e.target.value)
                     }
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl py-4 pl-14 pr-5 outline-none"
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-blue-500"
                 />
 
             </div>
+            {/* Mobile Message Cards */}
 
-            {/* Messages Table */}
+            <div className="grid grid-cols-1 gap-5 lg:hidden">
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden">
+                {filteredMessages.length > 0 ? (
+                    filteredMessages.map((message) => (
+                        <div
+                            key={message.id}
+                            className="bg-slate-900 border border-slate-800 rounded-2xl p-5"
+                        >
 
-                <div className="overflow-x-auto">
+                            <div>
 
-                    <table className="w-full">
+                                <h2 className="text-xl font-semibold break-words">
+                                    {message.name}
+                                </h2>
 
-                        <thead className="bg-slate-800">
+                                <p className="text-blue-400 mt-2 break-all">
+                                    {message.email}
+                                </p>
 
-                            <tr>
+                            </div>
 
-                                <th className="px-6 py-4 text-left">
-                                    Name
-                                </th>
+                            <div className="mt-5 space-y-3">
 
-                                <th className="px-6 py-4 text-left">
-                                    Email
-                                </th>
+                                <div>
 
-                                <th className="px-6 py-4 text-left">
-                                    Subject
-                                </th>
+                                    <span className="text-slate-400 text-sm">
+                                        Subject
+                                    </span>
 
-                                <th className="px-6 py-4 text-left">
-                                    Message
-                                </th>
+                                    <p className="mt-1 break-words">
+                                        {message.subject}
+                                    </p>
 
-                                <th className="px-6 py-4 text-left">
-                                    Date
-                                </th>
+                                </div>
 
-                                <th className="px-6 py-4 text-center">
-                                    Action
-                                </th>
+                                <div>
 
-                            </tr>
+                                    <span className="text-slate-400 text-sm">
+                                        Message
+                                    </span>
 
-                        </thead>
+                                    <p className="mt-1 text-slate-300 break-words">
+                                        {message.message}
+                                    </p>
 
-                        <tbody>
+                                </div>
 
-                            {filteredMessages.length > 0 ? (
+                                <div className="flex justify-between items-center pt-2">
 
-                                filteredMessages.map((message) => (
+                                    <span className="text-slate-400">
+                                        Date
+                                    </span>
 
-                                    <tr
-                                        key={message.id}
-                                        className="border-t border-slate-800 hover:bg-slate-800 transition"
-                                    >
+                                    <span>
+                                        {message.date}
+                                    </span>
 
-                                        <td className="px-6 py-5 font-semibold">
-                                            {message.name}
-                                        </td>
+                                </div>
 
-                                        <td className="px-6 py-5 text-slate-300">
-                                            {message.email}
-                                        </td>
+                            </div>
 
-                                        <td className="px-6 py-5">
-                                            {message.subject}
-                                        </td>
+                            <div className="flex justify-end mt-6">
 
-                                        <td className="px-6 py-5 max-w-xs">
+                                <button
+                                    onClick={() => deleteMessage(message.id)}
+                                    className="w-10 h-10 rounded-lg bg-red-600 hover:bg-red-700 text-white flex items-center justify-center transition"
+                                >
+                                    <FaTrash />
+                                </button>
 
-                                            <p className="truncate">
+                            </div>
 
-                                                {message.message}
+                        </div>
+                    ))
+                ) : (
 
-                                            </p>
+                    <div className="bg-slate-900 border border-slate-800 rounded-2xl py-16 text-center">
 
-                                        </td>
+                        <div className="text-6xl">
+                            📭
+                        </div>
 
-                                        <td className="px-6 py-5">
-                                            {message.date}
-                                        </td>
+                        <h2 className="text-2xl font-bold mt-4">
+                            No Messages Found
+                        </h2>
 
-                                        <td className="px-6 py-5">
+                        <p className="text-slate-400 mt-2">
+                            Messages from your contact form will appear here.
+                        </p>
 
-                                            <div className="flex justify-center">
+                    </div>
 
-                                                <button
-                                                    onClick={() => deleteMessage(message.id)}
-                                                    className="w-10 h-10 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-400 flex items-center justify-center transition"
-                                                >
+                )}
 
-                                                    <FaTrash />
+            </div>
 
-                                                </button>
+            {/* Desktop Table */}
 
-                                            </div>
+            <div className="hidden lg:block bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
 
-                                        </td>
+                <table className="w-full">
 
-                                    </tr>
+                    <thead className="bg-slate-800">
 
-                                ))
+                        <tr>
 
-                            ) : (
+                            <th className="px-6 py-4 text-left">
+                                Name
+                            </th>
 
-                                <tr>
+                            <th className="px-6 py-4 text-left">
+                                Email
+                            </th>
 
-                                    <td
-                                        colSpan="6"
-                                        className="text-center py-20"
-                                    >
+                            <th className="px-6 py-4 text-left">
+                                Subject
+                            </th>
 
-                                        <div className="text-6xl mb-4">
+                            <th className="px-6 py-4 text-left">
+                                Message
+                            </th>
 
-                                            📭
+                            <th className="px-6 py-4 text-left">
+                                Date
+                            </th>
+
+                            <th className="px-6 py-4 text-center">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {filteredMessages.length > 0 ? (
+
+                            filteredMessages.map((message) => (
+
+                                <tr
+                                    key={message.id}
+                                    className="border-t border-slate-800 hover:bg-slate-800 transition"
+                                >
+
+                                    <td className="px-6 py-5 font-semibold">
+                                        {message.name}
+                                    </td>
+
+                                    <td className="px-6 py-5 break-all">
+                                        {message.email}
+                                    </td>
+
+                                    <td className="px-6 py-5">
+                                        {message.subject}
+                                    </td>
+
+                                    <td className="px-6 py-5 max-w-md">
+
+                                        <p className="break-words text-slate-300">
+                                            {message.message}
+                                        </p>
+
+                                    </td>
+
+                                    <td className="px-6 py-5">
+                                        {message.date}
+                                    </td>
+
+                                    <td className="px-6 py-5">
+
+                                        <div className="flex justify-center">
+
+                                            <button
+                                                onClick={() => deleteMessage(message.id)}
+                                                className="w-10 h-10 rounded-lg bg-red-600 hover:bg-red-700 text-white flex items-center justify-center transition"
+                                            >
+                                                <FaTrash />
+                                            </button>
 
                                         </div>
-
-                                        <h2 className="text-2xl font-bold">
-
-                                            No Messages Found
-
-                                        </h2>
-
-                                        <p className="text-slate-400 mt-2">
-
-                                            Messages from your contact form will appear here.
-
-                                        </p>
 
                                     </td>
 
                                 </tr>
 
-                            )}
+                            ))
 
-                        </tbody>
+                        ) : (
 
-                    </table>
+                            <tr>
 
-                </div>
+                                <td
+                                    colSpan={6}
+                                    className="py-20 text-center"
+                                >
+
+                                    <div className="text-6xl">
+                                        📭
+                                    </div>
+
+                                    <h2 className="text-2xl font-bold mt-4">
+                                        No Messages Found
+                                    </h2>
+
+                                    <p className="text-slate-400 mt-2">
+                                        Messages from your contact form will appear here.
+                                    </p>
+
+                                </td>
+
+                            </tr>
+
+                        )}
+
+                    </tbody>
+
+                </table>
 
             </div>
         </div>
-
     );
-
 }
 
 export default MessagesAdmin;

@@ -15,7 +15,6 @@ function ProjectsAdmin() {
     });
 
     const [editingId, setEditingId] = useState(null);
-
     const [search, setSearch] = useState("");
 
     const [form, setForm] = useState({
@@ -30,13 +29,8 @@ function ProjectsAdmin() {
     });
 
     useEffect(() => {
-        localStorage.setItem(
-            "projects",
-            JSON.stringify(projects)
-        );
+        localStorage.setItem("projects", JSON.stringify(projects));
     }, [projects]);
-
-    // Upload Image
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -55,8 +49,6 @@ function ProjectsAdmin() {
         reader.readAsDataURL(file);
     };
 
-    // Clear Form
-
     const clearForm = () => {
         setForm({
             title: "",
@@ -72,14 +64,9 @@ function ProjectsAdmin() {
         setEditingId(null);
     };
 
-    // Add / Update
-
     const addOrUpdateProject = () => {
-        if (
-            form.title.trim() === "" ||
-            form.category.trim() === ""
-        ) {
-            alert("Please fill all required fields.");
+        if (!form.title.trim() || !form.category.trim()) {
+            alert("Please fill required fields.");
             return;
         }
 
@@ -92,19 +79,14 @@ function ProjectsAdmin() {
         };
 
         if (editingId) {
-            setProjects(
-                projects.map((item) =>
-                    item.id === editingId
-                        ? {
-                            ...item,
-                            ...project,
-                        }
-                        : item
+            setProjects((prev) =>
+                prev.map((item) =>
+                    item.id === editingId ? { ...item, ...project } : item
                 )
             );
         } else {
-            setProjects([
-                ...projects,
+            setProjects((prev) => [
+                ...prev,
                 {
                     id: Date.now(),
                     ...project,
@@ -115,22 +97,18 @@ function ProjectsAdmin() {
         clearForm();
     };
 
-    // Edit
-
     const editProject = (project) => {
         setEditingId(project.id);
 
         setForm({
             title: project.title,
             category: project.category,
-            image: project.image || "",
-            tech: Array.isArray(project.tech)
-                ? project.tech.join(", ")
-                : "",
-            description: project.description || "",
-            github: project.github || "",
-            live: project.live || "",
-            featured: project.featured || false,
+            image: project.image,
+            tech: project.tech.join(", "),
+            description: project.description,
+            github: project.github,
+            live: project.live,
+            featured: project.featured,
         });
 
         window.scrollTo({
@@ -139,80 +117,69 @@ function ProjectsAdmin() {
         });
     };
 
-    // Delete
-
     const deleteProject = (id) => {
         if (window.confirm("Delete this project?")) {
-            setProjects(
-                projects.filter(
-                    (item) => item.id !== id
-                )
-            );
+            setProjects((prev) => prev.filter((item) => item.id !== id));
         }
     };
 
-    // Search
-
     const filteredProjects = projects.filter(
         (project) =>
-            project.title
-                .toLowerCase()
-                .includes(search.toLowerCase()) ||
-            project.category
-                .toLowerCase()
-                .includes(search.toLowerCase())
+            project.title.toLowerCase().includes(search.toLowerCase()) ||
+            project.category.toLowerCase().includes(search.toLowerCase())
     );
 
     return (
-        <div className="space-y-8">
-            {/* Heading */}
+        <div className="space-y-8 p-4 md:p-6">
 
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-5">
+            {/* Header */}
+
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+
                 <div>
-                    <h1 className="text-4xl font-bold">
+
+                    <h1 className="text-3xl font-bold text-white">
                         Projects
                     </h1>
 
                     <p className="text-slate-400 mt-2">
-                        Manage your portfolio projects.
+                        Add, edit and manage your portfolio projects.
                     </p>
+
                 </div>
 
                 <button
                     onClick={addOrUpdateProject}
-                    className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl flex items-center gap-3 transition"
+                    className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl transition w-full lg:w-auto"
                 >
                     <FaPlus />
 
-                    {editingId
-                        ? "Update Project"
-                        : "Add Project"}
+                    {editingId ? "Update Project" : "Add Project"}
                 </button>
+
             </div>
 
             {/* Search */}
 
             <div className="relative">
-                <FaSearch className="absolute left-5 top-5 text-slate-500" />
+
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
 
                 <input
                     type="text"
-                    placeholder="Search Project..."
+                    placeholder="Search project..."
                     value={search}
-                    onChange={(e) =>
-                        setSearch(e.target.value)
-                    }
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl py-4 pl-14 pr-5 outline-none focus:border-blue-500"
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 pl-12 pr-4 outline-none focus:border-blue-500"
                 />
+
             </div>
 
             {/* Form */}
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8">
+            <div className="bg-slate-900 rounded-2xl border border-slate-800 p-5 md:p-8">
 
-                <div className="grid md:grid-cols-2 gap-6">
-
-                    {/* Title */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                     <input
                         type="text"
@@ -224,14 +191,12 @@ function ProjectsAdmin() {
                                 title: e.target.value,
                             })
                         }
-                        className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
+                        className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
                     />
-
-                    {/* Category */}
 
                     <input
                         type="text"
-                        placeholder="Category (AI, Web, ML...)"
+                        placeholder="Category"
                         value={form.category}
                         onChange={(e) =>
                             setForm({
@@ -239,14 +204,12 @@ function ProjectsAdmin() {
                                 category: e.target.value,
                             })
                         }
-                        className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
+                        className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
                     />
-
-                    {/* Tech */}
 
                     <input
                         type="text"
-                        placeholder="Technologies (React, Tailwind, Firebase...)"
+                        placeholder="Technologies (React, Tailwind...)"
                         value={form.tech}
                         onChange={(e) =>
                             setForm({
@@ -254,10 +217,8 @@ function ProjectsAdmin() {
                                 tech: e.target.value,
                             })
                         }
-                        className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
+                        className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
                     />
-
-                    {/* Description */}
 
                     <textarea
                         rows="5"
@@ -269,10 +230,8 @@ function ProjectsAdmin() {
                                 description: e.target.value,
                             })
                         }
-                        className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none resize-none focus:border-blue-500"
+                        className="md:col-span-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 resize-none outline-none focus:border-blue-500"
                     />
-
-                    {/* GitHub */}
 
                     <input
                         type="url"
@@ -284,10 +243,8 @@ function ProjectsAdmin() {
                                 github: e.target.value,
                             })
                         }
-                        className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
+                        className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
                     />
-
-                    {/* Live */}
 
                     <input
                         type="url"
@@ -299,13 +256,12 @@ function ProjectsAdmin() {
                                 live: e.target.value,
                             })
                         }
-                        className="bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
+                        className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
                     />
 
-                    {/* Image Upload */}
-
                     <div className="md:col-span-2">
-                        <label className="block text-slate-300 mb-3">
+
+                        <label className="block mb-3 text-slate-300">
                             Project Image
                         </label>
 
@@ -313,189 +269,332 @@ function ProjectsAdmin() {
                             type="file"
                             accept="image/*"
                             onChange={handleImageUpload}
-                            className="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 file:mr-4 file:px-4 file:py-2 file:border-0 file:bg-blue-600 file:text-white file:rounded-lg cursor-pointer"
+                            className="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 file:bg-blue-600 file:text-white file:border-0 file:px-4 file:py-2 file:rounded-lg"
                         />
 
                         {form.image && (
-                            <div className="mt-5">
-                                <img
-                                    src={form.image}
-                                    alt="Preview"
-                                    className="w-56 h-36 object-cover rounded-xl border border-slate-700"
-                                />
-                            </div>
+                            <img
+                                src={form.image}
+                                alt="Preview"
+                                className="mt-5 w-full sm:w-80 h-52 object-cover rounded-xl border border-slate-700"
+                            />
                         )}
+
                     </div>
 
                 </div>
+
+            </div>
+            {/* Mobile Cards */}
+
+            <div className="grid grid-cols-1 gap-5 lg:hidden">
+
+                {filteredProjects.length > 0 ? (
+                    filteredProjects.map((project) => (
+                        <div
+                            key={project.id}
+                            className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden"
+                        >
+
+                            <div className="h-48 bg-slate-800">
+
+                                {project.image ? (
+                                    <img
+                                        src={project.image}
+                                        alt={project.title}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-6xl">
+                                        💻
+                                    </div>
+                                )}
+
+                            </div>
+
+                            <div className="p-5">
+
+                                <div className="flex items-start justify-between gap-3">
+
+                                    <h2 className="text-xl font-semibold break-words">
+                                        {project.title}
+                                    </h2>
+
+                                    <span className="bg-blue-600/20 text-blue-300 text-xs px-3 py-1 rounded-full whitespace-nowrap">
+                                        {project.category}
+                                    </span>
+
+                                </div>
+
+                                <p className="text-slate-400 mt-3 text-sm break-words">
+                                    {project.description}
+                                </p>
+
+                                {project.tech.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mt-4">
+
+                                        {project.tech.map((tech, index) => (
+                                            <span
+                                                key={index}
+                                                className="px-3 py-1 rounded-lg bg-slate-800 text-xs"
+                                            >
+                                                {tech}
+                                            </span>
+                                        ))}
+
+                                    </div>
+                                )}
+
+                                <div className="flex justify-between items-center mt-6">
+
+                                    <div className="flex gap-3">
+
+                                        {project.github && (
+                                            <a
+                                                href={project.github}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center"
+                                            >
+                                                <FaGithub />
+                                            </a>
+                                        )}
+
+                                        {project.live && (
+                                            <a
+                                                href={project.live}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="w-10 h-10 rounded-lg bg-blue-600 hover:bg-blue-700 flex items-center justify-center"
+                                            >
+                                                <FaExternalLinkAlt />
+                                            </a>
+                                        )}
+
+                                    </div>
+
+                                    <div className="flex gap-3">
+
+                                        <button
+                                            onClick={() => editProject(project)}
+                                            className="w-10 h-10 rounded-lg bg-yellow-500 text-white flex items-center justify-center"
+                                        >
+                                            <FaEdit />
+                                        </button>
+
+                                        <button
+                                            onClick={() => deleteProject(project.id)}
+                                            className="w-10 h-10 rounded-lg bg-red-600 text-white flex items-center justify-center"
+                                        >
+                                            <FaTrash />
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    ))
+                ) : (
+                    <div className="bg-slate-900 border border-slate-800 rounded-2xl py-14 text-center">
+
+                        <div className="text-6xl">
+                            📂
+                        </div>
+
+                        <h2 className="text-2xl font-bold mt-4">
+                            No Projects Found
+                        </h2>
+
+                        <p className="text-slate-400 mt-2">
+                            Add your first project.
+                        </p>
+
+                    </div>
+                )}
+
             </div>
 
-            {/* Projects Table */}
+            {/* Desktop Table */}
 
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead className="bg-slate-800">
-                            <tr>
+            <div className="hidden lg:block bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
 
-                                <th className="px-6 py-4 text-left">
-                                    Project
-                                </th>
+                <table className="w-full">
 
-                                <th className="px-6 py-4 text-left">
-                                    Category
-                                </th>
+                    <thead className="bg-slate-800">
 
+                        <tr>
 
-                                <th className="px-6 py-4 text-center">
-                                    Links
-                                </th>
+                            <th className="text-left px-6 py-4">
+                                Project
+                            </th>
 
-                                <th className="px-6 py-4 text-center">
-                                    Actions
-                                </th>
+                            <th className="text-left px-6 py-4">
+                                Category
+                            </th>
 
-                            </tr>
-                        </thead>
+                            <th className="text-center px-6 py-4">
+                                Links
+                            </th>
 
-                        <tbody>
-                            {filteredProjects.length > 0 ? (
-                                filteredProjects.map((project) => (
-                                    <tr
-                                        key={project.id}
-                                        className="border-t border-slate-800 hover:bg-slate-800 transition"
-                                    >
-                                        {/* Project */}
+                            <th className="text-center px-6 py-4">
+                                Actions
+                            </th>
 
-                                        <td className="px-6 py-5">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-24 h-16 rounded-lg overflow-hidden bg-slate-800 border border-slate-700 flex-shrink-0">
-                                                    {project.image ? (
-                                                        <img
-                                                            src={project.image}
-                                                            alt={project.title}
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-3xl">
-                                                            💻
-                                                        </div>
-                                                    )}
-                                                </div>
+                        </tr>
 
-                                                <div>
-                                                    <h3 className="font-semibold text-lg">
-                                                        {project.title}
-                                                    </h3>
+                    </thead>
 
-                                                    <p className="text-slate-400 text-sm mt-1 line-clamp-2">
-                                                        {project.description}
-                                                    </p>
+                    <tbody>
 
-                                                    {project.tech &&
-                                                        project.tech.length > 0 && (
-                                                            <div className="flex flex-wrap gap-2 mt-3">
-                                                                {project.tech.map(
-                                                                    (tech, index) => (
-                                                                        <span
-                                                                            key={index}
-                                                                            className="px-2 py-1 text-xs rounded-md bg-blue-600/20 text-blue-300"
-                                                                        >
-                                                                            {tech}
-                                                                        </span>
-                                                                    )
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                </div>
-                                            </div>
-                                        </td>
+                        {filteredProjects.length > 0 ? (
+                            filteredProjects.map((project) => (
+                                <tr
+                                    key={project.id}
+                                    className="border-t border-slate-800 hover:bg-slate-800 transition"
+                                >
 
-                                        {/* Category */}
+                                    <td className="px-6 py-5">
 
-                                        <td className="px-6 py-5">
-                                            <span className="px-4 py-2 rounded-full bg-blue-600/20 text-blue-300">
-                                                {project.category}
-                                            </span>
-                                        </td>
+                                        <div className="flex items-start gap-4">
 
+                                            <div className="w-24 h-16 rounded-lg overflow-hidden bg-slate-800 flex-shrink-0">
 
-                                        {/* Links */}
-
-                                        <td className="px-6 py-5">
-                                            <div className="flex justify-center gap-4">
-                                                {project.github && (
-                                                    <a
-                                                        href={project.github}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        className="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition"
-                                                    >
-                                                        <FaGithub />
-                                                    </a>
+                                                {project.image ? (
+                                                    <img
+                                                        src={project.image}
+                                                        alt={project.title}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center">
+                                                        💻
+                                                    </div>
                                                 )}
 
-                                                {project.live && (
-                                                    <a
-                                                        href={project.live}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        className="w-10 h-10 rounded-xl bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition"
-                                                    >
-                                                        <FaExternalLinkAlt />
-                                                    </a>
+                                            </div>
+
+                                            <div>
+
+                                                <h3 className="font-semibold text-lg">
+                                                    {project.title}
+                                                </h3>
+
+                                                <p className="text-sm text-slate-400 mt-1 max-w-md break-words">
+                                                    {project.description}
+                                                </p>
+
+                                                {project.tech.length > 0 && (
+                                                    <div className="flex flex-wrap gap-2 mt-3">
+
+                                                        {project.tech.map((tech, index) => (
+                                                            <span
+                                                                key={index}
+                                                                className="bg-blue-600/20 text-blue-300 px-2 py-1 rounded text-xs"
+                                                            >
+                                                                {tech}
+                                                            </span>
+                                                        ))}
+
+                                                    </div>
                                                 )}
+
                                             </div>
-                                        </td>
 
-                                        {/* Actions */}
-
-                                        <td className="px-6 py-5">
-                                            <div className="flex justify-center gap-4">
-                                                <button
-                                                    onClick={() =>
-                                                        editProject(project)
-                                                    }
-                                                    className="w-10 h-10 rounded-xl bg-yellow-500/20 hover:bg-yellow-500 text-yellow-400 hover:text-white flex items-center justify-center transition"
-                                                >
-                                                    <FaEdit />
-                                                </button>
-
-                                                <button
-                                                    onClick={() =>
-                                                        deleteProject(project.id)
-                                                    }
-                                                    className="w-10 h-10 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white flex items-center justify-center transition"
-                                                >
-                                                    <FaTrash />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td
-                                        colSpan="5"
-                                        className="text-center py-20"
-                                    >
-                                        <div className="text-6xl mb-4">
-                                            📂
                                         </div>
 
-                                        <h2 className="text-2xl font-bold">
-                                            No Projects Found
-                                        </h2>
-
-                                        <p className="text-slate-400 mt-2">
-                                            Add your first project using the form above.
-                                        </p>
                                     </td>
+
+                                    <td className="px-6 py-5">
+
+                                        <span className="bg-blue-600/20 text-blue-300 px-4 py-2 rounded-full">
+                                            {project.category}
+                                        </span>
+
+                                    </td>
+
+                                    <td className="px-6 py-5">
+
+                                        <div className="flex justify-center gap-3">
+
+                                            {project.github && (
+                                                <a
+                                                    href={project.github}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center"
+                                                >
+                                                    <FaGithub />
+                                                </a>
+                                            )}
+
+                                            {project.live && (
+                                                <a
+                                                    href={project.live}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="w-10 h-10 rounded-lg bg-blue-600 hover:bg-blue-700 flex items-center justify-center"
+                                                >
+                                                    <FaExternalLinkAlt />
+                                                </a>
+                                            )}
+
+                                        </div>
+
+                                    </td>
+
+                                    <td className="px-6 py-5">
+
+                                        <div className="flex justify-center gap-3">
+
+                                            <button
+                                                onClick={() => editProject(project)}
+                                                className="w-10 h-10 rounded-lg bg-yellow-500 text-white flex items-center justify-center"
+                                            >
+                                                <FaEdit />
+                                            </button>
+
+                                            <button
+                                                onClick={() => deleteProject(project.id)}
+                                                className="w-10 h-10 rounded-lg bg-red-600 text-white flex items-center justify-center"
+                                            >
+                                                <FaTrash />
+                                            </button>
+
+                                        </div>
+
+                                    </td>
+
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                            ))
+                        ) : (
+                            <tr>
+
+                                <td colSpan={4} className="py-20 text-center">
+
+                                    <div className="text-6xl">
+                                        📂
+                                    </div>
+
+                                    <h2 className="text-2xl font-bold mt-4">
+                                        No Projects Found
+                                    </h2>
+
+                                    <p className="text-slate-400 mt-2">
+                                        Add your first project.
+                                    </p>
+
+                                </td>
+
+                            </tr>
+                        )}
+
+                    </tbody>
+
+                </table>
+
             </div>
         </div>
     );

@@ -42,7 +42,7 @@ function Projects() {
           </p>
 
           <h2 className="text-5xl md:text-6xl font-bold mt-4">
-            Featured Work
+            Tech Projects
           </h2>
 
           <p className="text-slate-400 max-w-3xl mx-auto mt-6 leading-8">

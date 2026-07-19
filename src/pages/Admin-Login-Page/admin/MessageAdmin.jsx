@@ -1,57 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-    FaEnvelope,
     FaSearch,
     FaTrash,
 } from "react-icons/fa";
 
 function MessagesAdmin() {
-
     const [search, setSearch] = useState("");
 
-    const [messages, setMessages] = useState([
+    const [messages, setMessages] = useState(() => {
+        const saved = localStorage.getItem("messages");
+        return saved ? JSON.parse(saved) : [];
+    });
 
-        {
-            id: 1,
-            name: "Kavya Patel",
-            email: "kavya@gmail.com",
-            subject: "Portfolio Project",
-            message:
-                "I really liked your portfolio. Let's connect.",
-            date: "05 July 2026",
-        },
-
-        {
-            id: 2,
-            name: "Rahul Shah",
-            email: "rahul@gmail.com",
-            subject: "Internship",
-            message:
-                "We have an internship opportunity for you.",
-            date: "04 July 2026",
-        },
-
-    ]);
+    useEffect(() => {
+        localStorage.setItem(
+            "messages",
+            JSON.stringify(messages)
+        );
+    }, [messages]);
 
     const deleteMessage = (id) => {
-
         if (window.confirm("Delete this message?")) {
-
-            setMessages(
-                messages.filter(
-                    (message) => message.id !== id
-                )
+            setMessages((prev) =>
+                prev.filter((message) => message.id !== id)
             );
-
         }
-
     };
 
-    const filteredMessages = messages.filter((message) =>
-        message.name
-            .toLowerCase()
-            .includes(search.toLowerCase())
-    );
+    const filteredMessages = messages.filter((message) => {
+        const searchText = search.toLowerCase();
+
+        return (
+            message.name.toLowerCase().includes(searchText) ||
+            message.email.toLowerCase().includes(searchText) ||
+            message.subject.toLowerCase().includes(searchText)
+        );
+    });
 
     return (
 

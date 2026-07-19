@@ -221,6 +221,33 @@ function Contact() {
               }}
               validationSchema={ContactSchema}
               onSubmit={(values, { resetForm, setSubmitting }) => {
+
+                // Save message to localStorage
+
+                const savedMessages =
+                  JSON.parse(localStorage.getItem("messages")) || [];
+
+                savedMessages.unshift({
+                  id: Date.now(),
+                  name: values.name,
+                  email: values.email,
+                  subject: "Portfolio Contact",
+                  mobile: values.mobile,
+                  message: values.message,
+                  date: new Date().toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  }),
+                });
+
+                localStorage.setItem(
+                  "messages",
+                  JSON.stringify(savedMessages)
+                );
+
+                // Send Email
+
                 emailjs
                   .send(
                     import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -351,7 +378,7 @@ function Contact() {
         </div>
 
       </div>
-    </section>
+    </section >
   );
 }
 

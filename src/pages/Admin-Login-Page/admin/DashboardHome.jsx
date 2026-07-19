@@ -136,6 +136,24 @@ function DashboardHome() {
       path: "/admin/dashboard/skills",
     },
     {
+      title: "Add Experience",
+      icon: <FaPlus />,
+      color: "bg-orange-600 hover:bg-orange-700",
+      path: "/admin/dashboard/experience",
+    },
+    {
+      title: "Add Education",
+      icon: <FaPlus />,
+      color: "bg-yellow-600 hover:bg-yellow-700",
+      path: "/admin/dashboard/education",
+    },
+    {
+      title: "View Messages",
+      icon: <FaEnvelope />,
+      color: "bg-pink-600 hover:bg-pink-700",
+      path: "/admin/dashboard/messages",
+    },
+    {
       title: "View Portfolio",
       icon: <FaEye />,
       color: "bg-purple-600 hover:bg-purple-700",

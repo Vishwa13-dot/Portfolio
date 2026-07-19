@@ -61,28 +61,29 @@ function AdminLogin() {
 
                         validationSchema={LoginSchema}
                         onSubmit={(values) => {
-
                             console.log("Submitted", values);
 
-                            if (
-                                values.email === "admin@gmail.com" &&
-                                values.password === "123456"
-                            ) {
+                            const savedSettings = JSON.parse(
+                                localStorage.getItem("adminSettings")
+                            );
 
+                            const adminEmail = savedSettings?.email || "admin@gmail.com";
+                            const adminPassword = savedSettings?.password || "123456";
+
+                            if (
+                                values.email === adminEmail &&
+                                values.password === adminPassword
+                            ) {
                                 localStorage.setItem("adminLoggedIn", "true");
 
                                 console.log("Correct Login");
 
                                 navigate("/admin/dashboard");
-
                             } else {
-
                                 console.log("Wrong Login");
 
                                 alert("Invalid Email or Password");
-
                             }
-
                         }}
                     >
 

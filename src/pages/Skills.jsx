@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import skillsFallback from "../data/skillsFallback";
 import {
     FaLaptopCode,
     FaCode,
@@ -12,8 +13,13 @@ function Skills() {
     const [savedSkills, setSavedSkills] = useState([]);
 
     useEffect(() => {
-        const data = JSON.parse(localStorage.getItem("skills")) || [];
-        setSavedSkills(data);
+        const data = JSON.parse(localStorage.getItem("skills"));
+
+        if (data && data.length > 0) {
+            setSavedSkills(data);
+        } else {
+            setSavedSkills(skillsFallback);
+        }
     }, []);
 
     const skillCategories = [

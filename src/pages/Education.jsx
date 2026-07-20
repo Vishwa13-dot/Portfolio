@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
+import educationFallback from "../data/educationFallback";
 
 function Education() {
   const [education, setEducation] = useState([]);
 
   useEffect(() => {
-    const savedEducation = localStorage.getItem("education");
+    const data = JSON.parse(localStorage.getItem("education"));
 
-    if (savedEducation) {
-      setEducation(JSON.parse(savedEducation));
+    if (data && data.length > 0) {
+      setEducation(data);
+    } else {
+      setEducation(educationFallback);
     }
   }, []);
-
+  
   return (
     <section id="education" className="section">
       <h2 className="section-title text-center">

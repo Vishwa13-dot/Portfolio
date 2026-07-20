@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
+import experienceFallback from "../data/experienceFallback";
 
 function Experience() {
   const [experience, setExperience] = useState([]);
 
   useEffect(() => {
-    const savedExperience = localStorage.getItem("experience");
+    const data = JSON.parse(localStorage.getItem("experience"));
 
-    if (savedExperience) {
-      setExperience(JSON.parse(savedExperience));
+    if (data && data.length > 0) {
+      setExperience(data);
+    } else {
+      setExperience(experienceFallback);
     }
   }, []);
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import projectsFallback from "../data/projectsFallback";
 import {
   FaGithub,
   FaExternalLinkAlt,
@@ -9,10 +10,12 @@ function Projects() {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    const savedProjects = localStorage.getItem("projects");
+    const data = JSON.parse(localStorage.getItem("projects"));
 
-    if (savedProjects) {
-      setProjects(JSON.parse(savedProjects));
+    if (data && data.length > 0) {
+      setProjects(data);
+    } else {
+      setProjects(projectsFallback);
     }
   }, []);
 
@@ -63,8 +66,8 @@ function Projects() {
                 setFilter(category)
               }
               className={`px-7 py-3 rounded-full border transition-all duration-300 ${filter === category
-                  ? "bg-blue-600 border-blue-600"
-                  : "border-slate-700 hover:border-blue-500"
+                ? "bg-blue-600 border-blue-600"
+                : "border-slate-700 hover:border-blue-500"
                 }`}
             >
               {category}
@@ -96,8 +99,8 @@ function Projects() {
                 <div
                   key={project.id}
                   className={`grid lg:grid-cols-2 gap-14 items-center ${index % 2 !== 0
-                      ? "lg:[&>*:first-child]:order-2"
-                      : ""
+                    ? "lg:[&>*:first-child]:order-2"
+                    : ""
                     }`}
                 >
                   {/* Image */}

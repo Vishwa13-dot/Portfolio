@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+
 import {
     FaPlus,
     FaSearch,
     FaEdit,
     FaTrash,
 } from "react-icons/fa";
+import ls from "../../../utils/secureStorage";
 
 function SkillsAdmin() {
     const categories = [
@@ -16,12 +18,27 @@ function SkillsAdmin() {
     ];
 
     const [skills, setSkills] = useState(() => {
-        const saved = localStorage.getItem("skills");
-        return saved ? JSON.parse(saved) : [];
-    });
+        try {
+            const data = ls.get("skills");
 
+            if (Array.isArray(data)) {
+                return data;
+            }
+
+            return [];
+        } catch (error) {
+            console.error("SecureLS:", error);
+
+            try {
+                ls.remove("skills");
+            } catch { }
+
+            return [];
+        }
+    });
+    console.log("skills", skills);
     useEffect(() => {
-        localStorage.setItem("skills", JSON.stringify(skills));
+        ls.set("skills", skills);
     }, [skills]);
 
     const [editingId, setEditingId] = useState(null);

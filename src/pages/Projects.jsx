@@ -4,17 +4,23 @@ import {
   FaGithub,
   FaExternalLinkAlt,
 } from "react-icons/fa";
+import ls from "../utils/secureStorage";
 
 function Projects() {
   const [filter, setFilter] = useState("All");
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("projects"));
+    try {
+      const data = ls.get("projects");
 
-    if (data && data.length > 0) {
-      setProjects(data);
-    } else {
+      setProjects(
+        Array.isArray(data) && data.length > 0
+          ? data
+          : projectsFallback
+      );
+    } catch (error) {
+      console.error("SecureLS:", error);
       setProjects(projectsFallback);
     }
   }, []);

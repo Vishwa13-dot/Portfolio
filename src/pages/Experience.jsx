@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
+import ls from "../utils/secureStorage";
 import experienceFallback from "../data/experienceFallback";
 
 function Experience() {
   const [experience, setExperience] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("experience"));
-
-    if (data && data.length > 0) {
-      setExperience(data);
-    } else {
-      setExperience(experienceFallback);
-    }
-  }, []);
+      try {
+        const data = ls.get("experience");
+  
+        setExperience(
+          Array.isArray(data) && data.length > 0
+            ? data
+            : experienceFallback
+        );
+      } catch (error) {
+        console.error("SecureLS:", error);
+        setExperience(experienceFallback);
+      }
+    }, []);
 
   return (
     <section id="experience" className="section">

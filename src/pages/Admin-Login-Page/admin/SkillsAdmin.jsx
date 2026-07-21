@@ -36,9 +36,12 @@ function SkillsAdmin() {
             return [];
         }
     });
-    console.log("skills", skills);
     useEffect(() => {
-        ls.set("skills", skills);
+        if (skills.length > 0) {
+            ls.set("skills", skills);
+        } else {
+            ls.remove("skills");
+        }
     }, [skills]);
 
     const [editingId, setEditingId] = useState(null);

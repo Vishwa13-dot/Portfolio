@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ls from "../../../utils/secureStorage";
 import {
     FaPlus,
     FaSearch,
@@ -8,8 +9,23 @@ import {
 
 function EducationAdmin() {
     const [education, setEducation] = useState(() => {
-        const saved = localStorage.getItem("education");
-        return saved ? JSON.parse(saved) : [];
+        try {
+            const data = ls.get("education");
+
+            if (Array.isArray(data)) {
+                return data;
+            }
+
+            return [];
+        } catch (error) {
+            console.error("SecureLS:", error);
+
+            try {
+                ls.remove("education");
+            } catch { }
+
+            return [];
+        }
     });
 
     const [editingId, setEditingId] = useState(null);
@@ -24,10 +40,11 @@ function EducationAdmin() {
     });
 
     useEffect(() => {
-        localStorage.setItem(
-            "education",
-            JSON.stringify(education)
-        );
+        if (education.length > 0) {
+            ls.set("education", education);
+        } else {
+            ls.remove("education");
+        }
     }, [education]);
 
     const clearForm = () => {

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import ls from "../../../utils/secureStorage";
+
 import { Link } from "react-router-dom";
 import {
   FaProjectDiagram,
@@ -25,70 +27,61 @@ function DashboardHome() {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
-    const projects =
-      JSON.parse(localStorage.getItem("projects")) || [];
+    try {
+      const projects = ls.get("projects") || [];
+      const skills = ls.get("skills") || [];
+      const experience = ls.get("experience") || [];
+      const education = ls.get("education") || [];
+      const messages = ls.get("messages") || [];
 
-    const skills =
-      JSON.parse(localStorage.getItem("skills")) || [];
-
-    const experience =
-      JSON.parse(localStorage.getItem("experience")) || [];
-
-    const education =
-      JSON.parse(localStorage.getItem("education")) || [];
-
-    const messages =
-      JSON.parse(localStorage.getItem("messages")) || [];
-
-    setStats({
-      projects: projects.length,
-      skills: skills.length,
-      experience: experience.length,
-      education: education.length,
-      messages: messages.length,
-    });
-
-    const recent = [];
-
-    if (projects.length) {
-      recent.push({
-        title: "Project Added",
-        description:
-          projects[0].title || "New project created.",
-        color: "border-blue-500",
+      setStats({
+        projects: projects.length,
+        skills: skills.length,
+        experience: experience.length,
+        education: education.length,
+        messages: messages.length,
       });
-    }
 
-    if (skills.length) {
-      recent.push({
-        title: "Skill Updated",
-        description:
-          skills[0].name || "Skill added.",
-        color: "border-green-500",
-      });
-    }
+      const recent = [];
 
-    if (messages.length) {
-      recent.push({
-        title: "New Contact Message",
-        description:
-          messages[0].name || "Portfolio visitor",
-        color: "border-pink-500",
-      });
-    }
+      if (projects.length) {
+        recent.push({
+          title: "Project Added",
+          description: projects[0].title || "New project created.",
+          color: "border-blue-500",
+        });
+      }
 
-    if (education.length) {
-      recent.push({
-        title: "Education Updated",
-        description:
-          education[0].degree || "Education details",
-        color: "border-yellow-500",
-      });
-    }
+      if (skills.length) {
+        recent.push({
+          title: "Skill Updated",
+          description: skills[0].name || "Skill added.",
+          color: "border-green-500",
+        });
+      }
 
-    setActivities(recent);
+      if (messages.length) {
+        recent.push({
+          title: "New Contact Message",
+          description: messages[0].name || "Portfolio visitor",
+          color: "border-pink-500",
+        });
+      }
+
+      if (education.length) {
+        recent.push({
+          title: "Education Updated",
+          description: education[0].degree || "Education details",
+          color: "border-yellow-500",
+        });
+      }
+
+      setActivities(recent);
+    } catch (error) {
+      console.error("SecureLS:", error);
+    }
   }, []);
-
+  
   const cards = [
     {
       title: "Projects",

@@ -1,19 +1,25 @@
 import { useEffect, useState } from "react";
+import ls from "../utils/secureStorage";
 import educationFallback from "../data/educationFallback";
 
 function Education() {
   const [education, setEducation] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("education"));
+    try {
+      const data = ls.get("education");
 
-    if (data && data.length > 0) {
-      setEducation(data);
-    } else {
+      setEducation(
+        Array.isArray(data) && data.length > 0
+          ? data
+          : educationFallback
+      );
+    } catch (error) {
+      console.error("SecureLS:", error);
       setEducation(educationFallback);
     }
   }, []);
-  
+
   return (
     <section id="education" className="section">
       <h2 className="section-title text-center">

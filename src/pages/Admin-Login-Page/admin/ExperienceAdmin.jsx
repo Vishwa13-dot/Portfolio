@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import ls from "../../../utils/secureStorage";
+
 import {
   FaPlus,
   FaSearch,
@@ -8,8 +10,23 @@ import {
 
 function ExperienceAdmin() {
   const [experience, setExperience] = useState(() => {
-    const saved = localStorage.getItem("experience");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const data = ls.get("experience");
+
+      if (Array.isArray(data)) {
+        return data;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("SecureLS:", error);
+
+      try {
+        ls.remove("experience");
+      } catch { }
+
+      return [];
+    }
   });
 
   const [editingId, setEditingId] = useState(null);
@@ -24,10 +41,11 @@ function ExperienceAdmin() {
   });
 
   useEffect(() => {
-    localStorage.setItem(
-      "experience",
-      JSON.stringify(experience)
-    );
+    if (experience.length > 0) {
+      ls.set("experience", experience);
+    } else {
+      ls.remove("experience");
+    }
   }, [experience]);
 
   const clearForm = () => {

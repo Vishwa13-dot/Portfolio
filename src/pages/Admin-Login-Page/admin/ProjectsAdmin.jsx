@@ -7,13 +7,39 @@ import {
     FaEdit,
     FaTrash,
 } from "react-icons/fa";
+import ls from "../../../utils/secureStorage";
+
 
 function ProjectsAdmin() {
     const [projects, setProjects] = useState(() => {
-        const saved = localStorage.getItem("projects");
-        return saved ? JSON.parse(saved) : [];
+        try {
+            const data = ls.get("projects");
+
+            if (Array.isArray(data)) {
+                return data;
+            }
+
+            return [];
+        } catch (error) {
+            console.error("SecureLS:", error);
+
+            try {
+                ls.remove("projects");
+            } catch { }
+
+            return [];
+        }
     });
 
+    useEffect(() => {
+        if (projects.length > 0) {
+            ls.set("projects", projects);
+        } else {
+            ls.remove("projects");
+        }
+    }, [projects]);
+
+    
     const [editingId, setEditingId] = useState(null);
     const [search, setSearch] = useState("");
 
@@ -28,9 +54,6 @@ function ProjectsAdmin() {
         featured: false,
     });
 
-    useEffect(() => {
-        localStorage.setItem("projects", JSON.stringify(projects));
-    }, [projects]);
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];

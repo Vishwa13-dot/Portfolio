@@ -1,19 +1,36 @@
 import { useState, useEffect } from "react";
+import ls from "../../../utils/secureStorage";
 import { FaSearch, FaTrash } from "react-icons/fa";
 
 function MessagesAdmin() {
     const [search, setSearch] = useState("");
 
     const [messages, setMessages] = useState(() => {
-        const saved = localStorage.getItem("messages");
-        return saved ? JSON.parse(saved) : [];
+        try {
+            const data = ls.get("messages");
+
+            if (Array.isArray(data)) {
+                return data;
+            }
+
+            return [];
+        } catch (error) {
+            console.error("SecureLS:", error);
+
+            try {
+                ls.remove("messages");
+            } catch { }
+
+            return [];
+        }
     });
 
     useEffect(() => {
-        localStorage.setItem(
-            "messages",
-            JSON.stringify(messages)
-        );
+        if (messages.length > 0) {
+            ls.set("messages", messages);
+        } else {
+            ls.remove("messages");
+        }
     }, [messages]);
 
     const deleteMessage = (id) => {

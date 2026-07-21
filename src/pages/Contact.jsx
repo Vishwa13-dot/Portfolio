@@ -1,6 +1,7 @@
 import { FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import ls from "../utils/secureStorage";
 import emailjs from "@emailjs/browser";
 
 const ContactSchema = Yup.object({
@@ -224,27 +225,27 @@ function Contact() {
 
                 // Save message to localStorage
 
-                const savedMessages =
-                  JSON.parse(localStorage.getItem("messages")) || [];
+                try {
+                  const savedMessages = ls.get("messages") || [];
 
-                savedMessages.unshift({
-                  id: Date.now(),
-                  name: values.name,
-                  email: values.email,
-                  subject: "Portfolio Contact",
-                  mobile: values.mobile,
-                  message: values.message,
-                  date: new Date().toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                  }),
-                });
+                  savedMessages.unshift({
+                    id: Date.now(),
+                    name: values.name,
+                    email: values.email,
+                    subject: "Portfolio Contact",
+                    mobile: values.mobile,
+                    message: values.message,
+                    date: new Date().toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    }),
+                  });
 
-                localStorage.setItem(
-                  "messages",
-                  JSON.stringify(savedMessages)
-                );
+                  ls.set("messages", savedMessages);
+                } catch (error) {
+                  console.error("SecureLS:", error);
+                }
 
                 // Send Email
 

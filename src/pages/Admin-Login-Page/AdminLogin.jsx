@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ls from "../../utils/secureStorage";
 import { useNavigate } from "react-router-dom";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -61,28 +62,28 @@ function AdminLogin() {
 
                         validationSchema={LoginSchema}
                         onSubmit={(values) => {
-                            console.log("Submitted", values);
+                            try {
+                                const savedSettings = ls.get("adminSettings") || {
+                                    email: "admin@gmail.com",
+                                    password: "123456",
+                                };
 
-                            const savedSettings = JSON.parse(
-                                localStorage.getItem("adminSettings")
-                            );
+                                if (
+                                    values.email === savedSettings.email &&
+                                    values.password === savedSettings.password
+                                ) {
+                                    ls.set("adminLoggedIn", true);
 
-                            const adminEmail = savedSettings?.email || "admin@gmail.com";
-                            const adminPassword = savedSettings?.password || "123456";
+                                    console.log("Correct Login");
 
-                            if (
-                                values.email === adminEmail &&
-                                values.password === adminPassword
-                            ) {
-                                localStorage.setItem("adminLoggedIn", "true");
-
-                                console.log("Correct Login");
-
-                                navigate("/admin/dashboard");
-                            } else {
-                                console.log("Wrong Login");
-
-                                alert("Invalid Email or Password");
+                                    navigate("/admin/dashboard");
+                                } else {
+                                    console.log("Wrong Login");
+                                    alert("Invalid Email or Password");
+                                }
+                            } catch (error) {
+                                console.error("SecureLS:", error);
+                                alert("Something went wrong.");
                             }
                         }}
                     >

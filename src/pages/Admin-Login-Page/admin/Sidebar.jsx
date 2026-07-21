@@ -1,3 +1,4 @@
+import ls from "../../utils/secureStorage";
 import {
   FaHome,
   FaProjectDiagram,
@@ -61,7 +62,7 @@ function Sidebar({
   ];
 
   const logout = () => {
-    localStorage.removeItem("adminLoggedIn");
+    ls.remove("adminLoggedIn");
     navigate("/admin");
   };
 
@@ -71,11 +72,10 @@ function Sidebar({
 
       <div
         onClick={() => setMobileOpen(false)}
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden ${
-          mobileOpen
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden ${mobileOpen
             ? "opacity-100 visible"
             : "opacity-0 invisible"
-        }`}
+          }`}
       />
 
       {/* Sidebar */}
@@ -88,10 +88,9 @@ function Sidebar({
           z-50
           transition-all duration-300 ease-in-out
 
-          ${
-            mobileOpen
-              ? "translate-x-0"
-              : "-translate-x-full"
+          ${mobileOpen
+            ? "translate-x-0"
+            : "-translate-x-full"
           }
 
           lg:translate-x-0
@@ -169,18 +168,16 @@ function Sidebar({
               className={({ isActive }) =>
                 `
                 flex items-center
-                ${
-                  desktopCollapsed
-                    ? "justify-center px-3"
-                    : "gap-4 px-6"
+                ${desktopCollapsed
+                  ? "justify-center px-3"
+                  : "gap-4 px-6"
                 }
                 py-3 my-1 mx-2 rounded-xl
                 transition-all duration-300
 
-                ${
-                  isActive
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                ${isActive
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
                 }
               `
               }
@@ -209,10 +206,9 @@ function Sidebar({
             className={`
               w-full
               flex items-center
-              ${
-                desktopCollapsed
-                  ? "justify-center"
-                  : "justify-center gap-3"
+              ${desktopCollapsed
+                ? "justify-center"
+                : "justify-center gap-3"
               }
               bg-red-600
               hover:bg-red-700

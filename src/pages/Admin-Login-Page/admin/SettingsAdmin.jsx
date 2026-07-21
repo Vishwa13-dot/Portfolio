@@ -1,18 +1,31 @@
 import { useState } from "react";
+import ls from "../../../utils/secureStorage";
 import { FaSave, FaUserCog } from "react-icons/fa";
 
 function SettingsAdmin() {
   const [settings, setSettings] = useState(() => {
-    const saved = localStorage.getItem("adminSettings");
+  try {
+    const saved = ls.get("adminSettings");
 
-    return saved
-      ? JSON.parse(saved)
-      : {
-          name: "Vishwa Parmar",
-          email: "admin@gmail.com",
-          password: "123456",
-        };
-  });
+    return saved || {
+      name: "Vishwa Parmar",
+      email: "admin@gmail.com",
+      password: "123456",
+    };
+  } catch (error) {
+    console.error("SecureLS:", error);
+
+    try {
+      ls.remove("adminSettings");
+    } catch {}
+
+    return {
+      name: "Vishwa Parmar",
+      email: "admin@gmail.com",
+      password: "123456",
+    };
+  }
+});
 
   const handleSave = () => {
     const oldSettings = JSON.parse(

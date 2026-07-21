@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
+import ls from "../../utils/secureStorage";
 
 import Sidebar from "./Sidebar";
 
 function Dashboard() {
-  const isLoggedIn = localStorage.getItem("adminLoggedIn");
-
+  const isLoggedIn = ls.get("adminLoggedIn");
   if (!isLoggedIn) {
     return <Navigate to="/admin" replace />;
   }
@@ -24,9 +24,8 @@ function Dashboard() {
       />
 
       <div
-        className={`flex-1 flex flex-col transition-all duration-300 ${
-          desktopCollapsed ? "lg:ml-20" : "lg:ml-64"
-        }`}
+        className={`flex-1 flex flex-col transition-all duration-300 ${desktopCollapsed ? "lg:ml-20" : "lg:ml-64"
+          }`}
       >
         {/* Mobile Header */}
         <header className="lg:hidden sticky top-0 z-30 h-16 bg-slate-900 border-b border-slate-800 flex items-center px-4 flex-shrink-0">

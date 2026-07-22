@@ -1,26 +1,8 @@
-import ls from "../../utils/secureStorage";
-import {
-  FaHome,
-  FaProjectDiagram,
-  FaTools,
-  FaBriefcase,
-  FaGraduationCap,
-  FaEnvelope,
-  FaCog,
-  FaSignOutAlt,
-  FaTimes,
-  FaAngleDoubleLeft,
-  FaAngleDoubleRight,
-} from "react-icons/fa";
-
+import ls from "../../../utils/secureStorage";
+import {FaHome, FaProjectDiagram, FaTools, FaBriefcase, FaGraduationCap, FaEnvelope,FaCog, FaSignOutAlt, FaTimes, FaAngleDoubleLeft, FaAngleDoubleRight} from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 
-function Sidebar({
-  desktopCollapsed,
-  setDesktopCollapsed,
-  mobileOpen,
-  setMobileOpen,
-}) {
+function Sidebar({desktopCollapsed, setDesktopCollapsed, mobileOpen, setMobileOpen}) {
   const navigate = useNavigate();
 
   const menu = [
@@ -81,21 +63,12 @@ function Sidebar({
       {/* Sidebar */}
 
       <aside
-        className={`
-          fixed top-0 left-0 h-screen
-          bg-slate-900 border-r border-slate-800
-          flex flex-col
-          z-50
-          transition-all duration-300 ease-in-out
-
-          ${mobileOpen
+        className={`fixed top-0 left-0 h-screen bg-slate-900 border-r border-slate-800 flex flex-col z-50 transition-all duration-300 ease-in-out ${mobileOpen
             ? "translate-x-0"
             : "-translate-x-full"
           }
-
           lg:translate-x-0
           ${desktopCollapsed ? "lg:w-20" : "lg:w-64"}
-
           w-64
         `}
       >
@@ -203,10 +176,7 @@ function Sidebar({
 
           <button
             onClick={logout}
-            className={`
-              w-full
-              flex items-center
-              ${desktopCollapsed
+            className={`w-full flex items-center ${desktopCollapsed
                 ? "justify-center"
                 : "justify-center gap-3"
               }
@@ -233,5 +203,4 @@ function Sidebar({
     </>
   );
 }
-
 export default Sidebar;

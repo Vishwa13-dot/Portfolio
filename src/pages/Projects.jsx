@@ -28,7 +28,9 @@ function Projects() {
   const categories = [
     "All",
     ...new Set(
-      projects.map((project) => project.category)
+      projects
+        .map((project) => project.category)
+        .filter(Boolean)
     ),
   ];
 
@@ -103,7 +105,7 @@ function Projects() {
             {filteredProjects.map(
               (project, index) => (
                 <div
-                  key={project.id}
+                  key={project.id || index}
                   className={`grid lg:grid-cols-2 gap-14 items-center ${index % 2 !== 0
                     ? "lg:[&>*:first-child]:order-2"
                     : ""
@@ -129,9 +131,11 @@ function Projects() {
 
                   <div>
                     <div className="flex items-center gap-3">
-                      <p className="text-blue-400 uppercase tracking-[0.25em] text-sm">
-                        {project.category}
-                      </p>
+                      {project.category && (
+                        <p className="text-blue-400 uppercase tracking-[0.25em] text-sm">
+                          {project.category}
+                        </p>
+                      )}
                     </div>
 
                     <h3 className="text-4xl font-bold mt-4">
@@ -144,13 +148,13 @@ function Projects() {
 
                     {/* Tech */}
 
-                    {project.tech &&
-                      project.tech.length > 0 && (
+                    {project.technologies &&
+                      project.technologies.length > 0 && (
                         <div className="flex flex-wrap gap-3 mt-8">
-                          {project.tech.map(
+                          {project.technologies.map(
                             (tech, index) => (
                               <span
-                                key={index}
+                                key={tech}
                                 className="px-4 py-2 rounded-full bg-slate-900 border border-slate-700 text-sm text-slate-300 hover:border-blue-500 transition"
                               >
                                 {tech}

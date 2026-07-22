@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
-import ls from "../../utils/secureStorage";
+import ls from "../../../utils/secureStorage";
 
 import Sidebar from "./Sidebar";
 
